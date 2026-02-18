@@ -8,28 +8,26 @@ const imgBox = document.querySelector(".imgBox");
 const characterInfo = document.querySelector(".characterInfo");
 
 // Search for the character inputted by the user and return the results
-const searchCharacter = () => {
+const searchCharacter = async () => {
     url.search = new URLSearchParams({
         name: input.value
     });
     // Clear the page of the previous character, if applicable
     clearPage();
-    fetch(url)
-        .then(res => {
-            return res.json();
-        })
-        .then(data => {
-            // If the search returns no results, communicate that to the user
-            if(data.length === 0) {
-                const noResults = document.createElement("h4");
-                noResults.textContent = "No results found.";
-                characterInfo.appendChild(noResults);
-            }
-            // If not, display the character to the screen
-            else {
-                displayCharacter(data[0]);
-            }            
-        });
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // If the search returns no results, communicate that to the user
+    if(data.length === 0) {
+        const noResults = document.createElement("h4");
+        noResults.textContent = "No results found.";
+        characterInfo.appendChild(noResults);
+    }
+    // If not, display the character to the screen
+    else {
+        displayCharacter(data[0]);
+    }  
 }
 
 // Displays the character to the screen
