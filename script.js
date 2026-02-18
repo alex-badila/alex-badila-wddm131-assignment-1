@@ -1,83 +1,86 @@
+// Declare the app that this application will live in
+const app = {};
+
 // Get the URL for the fetch request
-const url = new URL("https://dragonball-api.com/api/characters");
+app.url = new URL("https://dragonball-api.com/api/characters");
 
 // Target important elements for display purposes
-const form = document.querySelector(".characterForm"); 
-const input = document.querySelector("#search");
-const imgBox = document.querySelector(".imgBox");
-const characterInfo = document.querySelector(".characterInfo");
+app.form = document.querySelector(".characterForm"); 
+app.input = document.querySelector("#search");
+app.imgBox = document.querySelector(".imgBox");
+app.characterInfo = document.querySelector(".characterInfo");
 
 // Search for the character inputted by the user and return the results
-const searchCharacter = async () => {
-    url.search = new URLSearchParams({
-        name: input.value
+app.searchCharacter = async () => {
+    app.url.search = new URLSearchParams({
+        name: app.input.value
     });
     // Clear the page of the previous character, if applicable
-    clearPage();
+    app.clearPage();
 
-    const response = await fetch(url);
-    const data = await response.json();
+    app.response = await fetch(app.url);
+    app.data = await app.response.json();
 
     // If the search returns no results, communicate that to the user
-    if(data.length === 0) {
+    if(app.data.length === 0) {
         const noResults = document.createElement("h4");
         noResults.textContent = "No results found.";
-        characterInfo.appendChild(noResults);
+        app.characterInfo.appendChild(noResults);
     }
     // If not, display the character to the screen
     else {
-        displayCharacter(data[0]);
+        app.displayCharacter(app.data[0]);
     }  
 }
 
 // Displays the character to the screen
-const displayCharacter = characterData => {
+app.displayCharacter = characterData => {
     // Display the image
     const img = document.createElement("img");
     img.src = characterData.image;
-    imgBox.appendChild(img);
+    app.imgBox.appendChild(img);
 
     // Display the name
     const name = document.createElement("h3");
     name.textContent = characterData.name;
-    characterInfo.appendChild(name);
+    app.characterInfo.appendChild(name);
 
     // Display the race
     const race = document.createElement("p");
     race.textContent = `Race: ${characterData.race}`;
-    characterInfo.appendChild(race);
+    app.characterInfo.appendChild(race);
 
     // Display the gender
     const gender = document.createElement("p");
     gender.textContent = `Gender: ${characterData.gender}`;
-    characterInfo.appendChild(gender);
+    app.characterInfo.appendChild(gender);
 
     // Display the base ki
     const baseKi = document.createElement("p");
     baseKi.textContent = `Base Ki: ${characterData.ki}`;
-    characterInfo.appendChild(baseKi);
+    app.characterInfo.appendChild(baseKi);
 
     // Display the max ki
     const maxKi = document.createElement("p");
     maxKi.textContent = `Max Ki: ${characterData.maxKi}`;
-    characterInfo.appendChild(maxKi);
+    app.characterInfo.appendChild(maxKi);
 
     // Display the affiliation
     const affiliation = document.createElement("p");
     affiliation.textContent = `Affiliation: ${characterData.affiliation}`;
-    characterInfo.appendChild(affiliation);
+    app.characterInfo.appendChild(affiliation);
 }
 
 // Clear the page between submits
-const clearPage = () => {
-  characterInfo.innerHTML = "";
-  imgBox.innerHTML = "";
-  input.value = "";
+app.clearPage = () => {
+  app.characterInfo.innerHTML = "";
+  app.imgBox.innerHTML = "";
+  app.input.value = "";
 }
 
 // Listen for the submit and resolve it
-form.addEventListener("submit", (e) => {
+app.form.addEventListener("submit", (e) => {
   e.preventDefault();
-  searchCharacter();
+  app.searchCharacter();
 });
 
